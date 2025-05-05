@@ -144,7 +144,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   TextButton(
                     onPressed: () async {
-                      if (await sendMessage(messageText, currentUserEmail, 1)) {
+                      if (await sendMessage(messageText.trim(), currentUserEmail, 1)) {
                         setState(() {
                           _dataStream = _fetchStreamData2(my.message_url);
                           messagesStream= MessagesStream();
