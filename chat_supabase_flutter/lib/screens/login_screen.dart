@@ -1,5 +1,4 @@
 import 'package:chat_supabase_flutter/constants.dart';
-import 'package:chat_supabase_flutter/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_supabase_flutter/components/rounded_button.dart';
 import 'package:chat_supabase_flutter/screens/chat_screen.dart';
