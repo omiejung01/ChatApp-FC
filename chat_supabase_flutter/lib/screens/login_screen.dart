@@ -4,6 +4,7 @@ import 'package:chat_supabase_flutter/components/rounded_button.dart';
 import 'package:chat_supabase_flutter/screens/chat_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:chat_supabase_flutter/screens/group_screen.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -102,7 +103,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.push(context,
                       MaterialPageRoute(
                           builder: (context) {
-                            return ChatScreen();
+                            //return ChatScreen();
+                            return GroupScreen();
                           }
                       )
                   );

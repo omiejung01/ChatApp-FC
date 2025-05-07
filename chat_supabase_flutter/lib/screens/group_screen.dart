@@ -49,10 +49,35 @@ class _GroupScreenState extends State<GroupScreen> {
         leading: null,
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.logout),
+              icon: Icon(Icons.person_2),
               onPressed: () {
 
               },
+            ),
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed:
+                    () => showDialog<String>(
+                  context: context,
+                  builder:
+                      (BuildContext context) => AlertDialog(
+                    title: const Text('AlertDialog Title'),
+                    content: const Text('AlertDialog description'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, 'OK');
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                ),
+
             ),
           ],
         title: Text('Talk group'),
@@ -62,8 +87,24 @@ class _GroupScreenState extends State<GroupScreen> {
       body: SafeArea(
         child: Column(
 
-        )
-      ),
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Card(child: _SampleCard(cardName: 'Elevated Card')),
+            Card.filled(child: _SampleCard(cardName: 'Filled Card')),
+            Card.outlined(child: _SampleCard(cardName: 'Outlined Card')),
+          ],
+        ),
+      )
     );
+  }
+}
+
+class _SampleCard extends StatelessWidget {
+  const _SampleCard({required this.cardName});
+  final String cardName;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(height: 100, child: Center(child: Text(cardName)));
   }
 }
