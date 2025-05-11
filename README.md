@@ -19,7 +19,7 @@ String signature_url = "y back-end message signature url";
 ```
 
 # images/
-Please put 2 image files in your images directory.
+Please put 2 image files in your images directory. The prefereable size is 600x600.
 
 ```
 logo.png
