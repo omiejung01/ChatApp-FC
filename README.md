@@ -25,3 +25,5 @@ Please put 2 image files in your images directory. The prefereable size is 600x6
 logo.png
 logo2.png
 ```
+# Todo
+- Avatar image file upload.
