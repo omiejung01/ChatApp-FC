@@ -87,7 +87,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
               Navigator.push(
                 context,
                   PageRouteBuilder(
-                      transitionDuration: Duration(seconds: 3),
+                      transitionDuration: Duration(seconds: 2),
                       pageBuilder: (_, __, ___) => LoginScreen()
                   )
                 ,

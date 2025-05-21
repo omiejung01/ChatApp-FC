@@ -13,6 +13,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  TextEditingController _password_controller = TextEditingController();
+
   final supabase = Supabase.instance.client;
   bool showSpinner = false;
 
@@ -60,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               TextField(
                 textAlign: TextAlign.center,
+                controller: _password_controller,
                 obscureText: true,
                 onChanged: (value) {
                   password = value;
@@ -100,14 +104,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
                 if (loginSuccess) {
                   alertMessage = '';
-                  Navigator.push(context,
+                  var result = await Navigator.push(context,
                       MaterialPageRoute(
-                          builder: (context) {
-                            //return ChatScreen();
-                            return GroupScreen();
-                          }
+                          builder: (context) => GroupScreen()
                       )
-                  );
+                  ).then((value) {
+                    _password_controller.clear();
+                  });
+
+                  if (!context.mounted) return;
+
+                  print(result);
                 } else {
                   setState(() {
                     //alertMessage = 'Invalid email or password';

@@ -1,14 +1,16 @@
 import 'package:chat_supabase_flutter/constants.dart';
+import 'package:chat_supabase_flutter/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_supabase_flutter/components/rounded_button.dart';
 import 'package:chat_supabase_flutter/screens/chat_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:chat_supabase_flutter/screens/profile_screen.dart';
 
 final _supabase = Supabase.instance.client;
 
-Session? session;
-User? user;
+Session? _session;
+User? _user;
 
 class GroupScreen extends StatefulWidget {
   const GroupScreen({super.key});
@@ -18,8 +20,9 @@ class GroupScreen extends StatefulWidget {
 }
 
 class _GroupScreenState extends State<GroupScreen> {
-  final supabase = Supabase.instance.client;
+
   bool showSpinner = false;
+  String currentUserEmail = '';
 
   void initState() {
     super.initState();
@@ -28,9 +31,9 @@ class _GroupScreenState extends State<GroupScreen> {
 
   void getCurrentUser() {
     try {
-      session = _supabase.auth.currentSession;
-      user = _supabase.auth.currentUser;
-      String? this_email = user!.email;
+      _session = _supabase.auth.currentSession;
+      _user = _supabase.auth.currentUser;
+      String? this_email = _user!.email;
       if (this_email == null) {
         throw Exception('Null user');
       } else {
@@ -46,12 +49,20 @@ class _GroupScreenState extends State<GroupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         leading: null,
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.person_2),
               onPressed: () {
-
+                Navigator.push(context,
+                    MaterialPageRoute(
+                        builder: (context) {
+                          //return ChatScreen();
+                          return ProfileScreen(email : currentUserEmail);
+                        }
+                    )
+                );
               },
             ),
             IconButton(
@@ -61,16 +72,18 @@ class _GroupScreenState extends State<GroupScreen> {
                   context: context,
                   builder:
                       (BuildContext context) => AlertDialog(
-                    title: const Text('AlertDialog Title'),
-                    content: const Text('AlertDialog description'),
+                    title: const Text('You will be logged out.'),
+                    content: const Text('Are you sure you want to log out?'),
                     actions: <Widget>[
                       TextButton(
-                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        onPressed: () => {},
                         child: const Text('Cancel'),
                       ),
                       TextButton(
-                        onPressed: () {
-                          Navigator.pop(context, 'OK');
+                        onPressed: ()  {
+                          //print('Outtttt');
+                          Navigator.pop(context, 'Logout');
+                          Navigator.pop(context, 'Logout');
                         },
                         child: const Text('OK'),
                       ),

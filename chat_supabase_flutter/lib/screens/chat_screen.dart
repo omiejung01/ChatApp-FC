@@ -8,11 +8,11 @@ import 'dart:async';
 
 final _supabase = Supabase.instance.client;
 
-Session? session;
-User? user;
+Session? _session;
+User? _user;
 
-String currentUserEmail = '';
-String messageText = '';
+String _currentUserEmail = '';
+String _messageText = '';
 late Stream<dynamic> _dataStream;
 int count1 = 0;
 int count2 = 0;
@@ -21,14 +21,14 @@ int count2 = 0;
 //List<String> texts = [];
 //List<String> sendTimes = [];
 
-MessagesStream messagesStream= new MessagesStream();
+MessagesStream _messagesStream= new MessagesStream();
 
 final _messageTextController = TextEditingController();
 final _scrollController = ScrollController();
 
 //List<MessageBubble> messageBubbles = [];
 
-String signature = '';
+String _signature = '';
 
 
 class ChatScreen extends StatefulWidget {
@@ -53,17 +53,17 @@ class _ChatScreenState extends State<ChatScreen> {
   Timer? timer;
 
   void refresh() async {
-    if (signature.isEmpty) {
-      signature = await getSignature();
+    if (_signature.isEmpty) {
+      _signature = await getSignature();
     } else {
       String new_signature = await getSignature();
-      if (signature == new_signature) {
+      if (_signature == new_signature) {
         // Do nothing
       } else {
-        signature = new_signature;
+        _signature = new_signature;
         setState(() {
           _dataStream = _fetchStreamData2(my.message_url);
-          messagesStream= MessagesStream();
+          _messagesStream= MessagesStream();
         });
       }
     }
@@ -83,13 +83,13 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void getCurrentUser() {
     try {
-      session = _supabase.auth.currentSession;
-      user = _supabase.auth.currentUser;
-      String? this_email = user!.email;
+      _session = _supabase.auth.currentSession;
+      _user = _supabase.auth.currentUser;
+      String? this_email = _user!.email;
       if (this_email == null) {
         throw Exception('Null user');
       } else {
-        currentUserEmail = this_email;
+        _currentUserEmail = this_email;
         //print("User email: $email");
       }
     } catch (e) {
@@ -127,7 +127,7 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            messagesStream,
+            _messagesStream,
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -137,17 +137,17 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: TextField(
                       controller: _messageTextController,
                       onChanged: (value) {
-                        messageText = value;
+                        _messageText = value;
                       },
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
                   TextButton(
                     onPressed: () async {
-                      if (await sendMessage(messageText.trim(), currentUserEmail, 1)) {
+                      if (await sendMessage(_messageText.trim(), _currentUserEmail, 1)) {
                         setState(() {
                           _dataStream = _fetchStreamData2(my.message_url);
-                          messagesStream= MessagesStream();
+                          _messagesStream= MessagesStream();
                         });
                         _scrollController.animateTo(
                           0.0,
@@ -155,7 +155,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           duration: const Duration(milliseconds: 1000),
                         );
                         //print(_dataStream.toString());
-                        messageText = '';
+                        _messageText = '';
                         //print("Success");
                         _messageTextController.clear();
                         //setState(() {
@@ -256,7 +256,7 @@ class MessagesStream extends StatelessWidget {
         List<MessageBubble> messageBubbles = [];
         //messageBubbles.clear();
 
-        final currentUser = currentUserEmail;
+        final currentUser = _currentUserEmail;
         //print("snapshot ${snapshot.data['message_text']} ${count2}");
         //count2 ++;
         for (var message in snapshot.data) {
