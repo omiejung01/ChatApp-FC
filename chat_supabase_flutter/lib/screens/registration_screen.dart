@@ -152,6 +152,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             '',
                           );
                           if (register_success) {
+                            await _showEmailDialog();
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (BuildContext context) => LoginScreen(),
@@ -332,5 +333,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
 
     return result;
+  }
+
+  Future<void> _showEmailDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Email confirmation'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Thank you for registration!!!'),
+                Text(''),
+                Text('Please confirm registration by clicking the link in your email.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('I understand.'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

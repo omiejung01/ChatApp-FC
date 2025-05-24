@@ -1,4 +1,6 @@
 import 'package:chat_supabase_flutter/constants.dart';
+import 'package:chat_supabase_flutter/models/app_user.dart';
+import 'package:chat_supabase_flutter/utils/app_user_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_supabase_flutter/components/rounded_button.dart';
 import 'package:chat_supabase_flutter/screens/chat_screen.dart';
@@ -104,9 +106,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
                 if (loginSuccess) {
                   alertMessage = '';
+                  AppUser currentUser = await getCurrentUser();
                   var result = await Navigator.push(context,
                       MaterialPageRoute(
-                          builder: (context) => GroupScreen()
+                          builder: (context) => GroupScreen(appUser: currentUser)
                       )
                   ).then((value) {
                     _password_controller.clear();

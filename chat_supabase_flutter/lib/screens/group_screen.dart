@@ -1,19 +1,22 @@
 import 'package:chat_supabase_flutter/constants.dart';
 import 'package:chat_supabase_flutter/screens/profile_screen.dart';
+import 'package:chat_supabase_flutter/utils/app_user_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_supabase_flutter/components/rounded_button.dart';
 import 'package:chat_supabase_flutter/screens/chat_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:chat_supabase_flutter/screens/profile_screen.dart';
+import 'package:chat_supabase_flutter/models/app_user.dart';
 
-final _supabase = Supabase.instance.client;
-
-Session? _session;
-User? _user;
+AppUser _appUser = new AppUser();
 
 class GroupScreen extends StatefulWidget {
-  const GroupScreen({super.key});
+  GroupScreen({super.key, required this.appUser}) {
+    _appUser = appUser;
+  }
+
+  AppUser appUser;
 
   @override
   State<GroupScreen> createState() => _GroupScreenState();
@@ -22,31 +25,16 @@ class GroupScreen extends StatefulWidget {
 class _GroupScreenState extends State<GroupScreen> {
 
   bool showSpinner = false;
-  String currentUserEmail = '';
 
-  void initState() {
+
+  void initState()  {
     super.initState();
-    getCurrentUser();
   }
 
-  void getCurrentUser() {
-    try {
-      _session = _supabase.auth.currentSession;
-      _user = _supabase.auth.currentUser;
-      String? this_email = _user!.email;
-      if (this_email == null) {
-        throw Exception('Null user');
-      } else {
-        currentUserEmail = this_email;
-        //print("User email: $email");
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
 
     @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -59,7 +47,7 @@ class _GroupScreenState extends State<GroupScreen> {
                     MaterialPageRoute(
                         builder: (context) {
                           //return ChatScreen();
-                          return ProfileScreen(email : currentUserEmail);
+                          return ProfileScreen(email : _appUser.email, appUser: _appUser);
                         }
                     )
                 );

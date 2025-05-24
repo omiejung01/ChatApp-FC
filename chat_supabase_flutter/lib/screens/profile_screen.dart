@@ -7,11 +7,14 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:chat_supabase_flutter/components/profile_menu.dart';
 import 'package:chat_supabase_flutter/screens/account_screen.dart';
+import 'package:chat_supabase_flutter/models/app_user.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:video_player/video_player.dart';
+import 'package:chat_supabase_flutter/models/app_user.dart';
+import 'package:chat_supabase_flutter/utils/app_user_preferences.dart';
 
 //final _supabase = Supabase.instance.client;
 
@@ -19,12 +22,23 @@ import 'package:video_player/video_player.dart';
 //User? user;
 
 String _currentUserEmail = '';
+AppUser _appUser = AppUser();
+
+String _pictureLocation = "https://tetrasolution.com/chatapp/images/person_blue02.png";
 
 class ProfileScreen extends StatefulWidget {
-
   String email = '';
-  ProfileScreen({super.key, required this.email}) {
+  AppUser appUser = AppUser();
+
+  ProfileScreen({super.key, required this.email, required this.appUser}) {
     _currentUserEmail = email;
+    _appUser = appUser;
+
+    if (_appUser.avatar.length ==0) {
+      // do nothing
+    } else {
+      _pictureLocation = _appUser.avatar;
+    }
   }
 
   @override
@@ -33,7 +47,9 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
 
-  String email = '';
+  //AppUser user = new AppUser();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           children: [
-            ProfilePic(),
+            ProfilePic(userEmail: _currentUserEmail),
             const SizedBox(height: 20),
             ProfileMenu(
               text: "My Account",
@@ -81,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Route _createRouteAccount() {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const AccountScreen(),
+      pageBuilder: (context, animation, secondaryAnimation) => AccountScreen(appUser: _appUser),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         const end = Offset.zero;
@@ -95,15 +111,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
+String _userEmail = '';
 class ProfilePic extends StatefulWidget {
-  const ProfilePic({super.key});
-
+  ProfilePic({super.key, required this.userEmail}) {
+    _userEmail = userEmail;
+  }
+  String userEmail;
   @override
   State<ProfilePic> createState() => _ProfilePicState();
 }
 
+
 class _ProfilePicState extends State<ProfilePic> {
-  String _pictureLocation = "https://tetrasolution.com/chatapp/images/person_blue02.png";
+
+  String errorMessage ="";
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +157,7 @@ class _ProfilePicState extends State<ProfilePic> {
                 ),
                 onPressed: () async {
                   print('Ad Astra Abyssosque!! - 01');
+
                   await _onImageButtonPressed(
                     ImageSource.gallery,
                     context: context,
@@ -151,8 +173,28 @@ class _ProfilePicState extends State<ProfilePic> {
                       _pictureLocation = newFile;
                     });
                     print('location: ' + _pictureLocation);
-                  }
+                    // Add Avatar to Database
+                    String url = "https://tetrasolution.com/chatapp/api/add_avatar.php?email=$_userEmail&location=$_pictureLocation";
+                    print('url: ' + url);
 
+                    final response = await http.get(
+                      Uri.parse(url),
+                      // Send authorization headers to the backend.
+                      headers: my.header,
+                    );
+
+                    final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
+
+                    String success = responseJson['result'];
+                    print("result: $success");
+                    if (success.compareTo('Success') == 0) {
+                      //allowed = true;
+                    } else {
+                      //allowed = false;
+                      //validateMessage = responseJson['Error'];
+                      errorMessage = "Cannot upload file";
+                    }
+                  }
                 },
                 child: Icon(
                   Icons.photo_camera,
@@ -162,6 +204,7 @@ class _ProfilePicState extends State<ProfilePic> {
               ),
             ),
           ),
+          //Text(errorMessage),
         ],
       ),
     );
