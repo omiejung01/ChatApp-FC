@@ -27,7 +27,7 @@ class GroupScreen extends StatefulWidget {
 class _GroupScreenState extends State<GroupScreen> {
 
   bool showSpinner = false;
-
+  String _enteredEmail = '';
 
   void initState() {
     super.initState();
@@ -104,7 +104,7 @@ class _GroupScreenState extends State<GroupScreen> {
                     },
                     child: IconButton(
                         onPressed: () {
-
+                          _showEmailInputDialog(context);
                         },
                         icon: Icon(
                             Icons.add,
@@ -123,6 +123,124 @@ class _GroupScreenState extends State<GroupScreen> {
           ),
         )
     );
+  }
+
+  Future<void> _showEmailInputDialog(BuildContext context) async {
+    final TextEditingController emailController = TextEditingController();
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+    String? result = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Receiver',
+            style: TextStyle(
+              color: Colors.orange,
+            ),
+          ),
+          content: Form(
+            key: formKey,
+            child: TextFormField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(
+                labelStyle: TextStyle(
+                  color: Colors.orange,
+                ),
+                labelText: "Email",
+                hintText: 'e.g., ohm@tetrasolution.com',
+                hintStyle: TextStyle(
+                  color: Colors.orange,
+                ),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    width: 20.0,
+                    color: Colors.orange,
+                  ),
+                  borderRadius:  const BorderRadius.all(
+                    Radius.circular(30.0)
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    width: 1.5,
+                    color: Colors.orange,
+                  ),
+                  borderRadius:  const BorderRadius.all(
+                      Radius.circular(30.0)
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    width: 1.5,
+                    color: Colors.orange,
+                  ),
+                  borderRadius:  const BorderRadius.all(
+                      Radius.circular(30.0)
+                  ),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter an email address.';
+                }
+                // Basic email regex validation
+                final bool emailValid = RegExp(
+                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                    .hasMatch(value);
+                if (!emailValid) {
+                  return 'Please enter a valid email address.';
+                }
+                if (value == _appUser.email) {
+                  return 'You cannot send messages to yourself.';
+                }
+                return null; // Return null if the input is valid
+              },
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel',
+                style: TextStyle(
+                  color: Colors.orange
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Confirm',
+                style: TextStyle(
+                    color: Colors.orange
+                ),
+              ),
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  // If the form is valid, pop the dialog with the entered email
+                  Navigator.of(context).pop(emailController.text);
+
+                  Navigator.push(context,
+                      MaterialPageRoute(
+                          builder: (context) {
+                            return ChatScreen();
+                          }
+                      )
+                  );
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    // Update the state with the received email (if any)
+    if (result != null) {
+      setState(() {
+        _enteredEmail = result;
+      });
+    }
   }
 }
 
