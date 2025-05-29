@@ -1,3 +1,4 @@
+import 'package:chat_supabase_flutter/components/group_chat_button.dart';
 import 'package:chat_supabase_flutter/constants.dart';
 import 'package:chat_supabase_flutter/screens/profile_screen.dart';
 import 'package:chat_supabase_flutter/utils/app_user_preferences.dart';
@@ -8,6 +9,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:chat_supabase_flutter/screens/profile_screen.dart';
 import 'package:chat_supabase_flutter/models/app_user.dart';
+import 'package:chat_supabase_flutter/components/group_chat_button.dart';
 
 AppUser _appUser = new AppUser();
 
@@ -27,18 +29,17 @@ class _GroupScreenState extends State<GroupScreen> {
   bool showSpinner = false;
 
 
-  void initState()  {
+  void initState() {
     super.initState();
   }
 
 
-    @override
-  Widget build(BuildContext context)  {
-
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: null,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: null,
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.person_2),
@@ -47,7 +48,8 @@ class _GroupScreenState extends State<GroupScreen> {
                     MaterialPageRoute(
                         builder: (context) {
                           //return ChatScreen();
-                          return ProfileScreen(email : _appUser.email, appUser: _appUser);
+                          return ProfileScreen(
+                              email: _appUser.email, appUser: _appUser);
                         }
                     )
                 );
@@ -56,46 +58,70 @@ class _GroupScreenState extends State<GroupScreen> {
             IconButton(
               icon: Icon(Icons.logout),
               onPressed:
-                    () => showDialog<String>(
-                  context: context,
-                  builder:
-                      (BuildContext context) => AlertDialog(
-                    title: const Text('You will be logged out.'),
-                    content: const Text('Are you sure you want to log out?'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => {},
-                        child: const Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: ()  {
-                          //print('Outtttt');
-                          Navigator.pop(context, 'Logout');
-                          Navigator.pop(context, 'Logout');
-                        },
-                        child: const Text('OK'),
-                      ),
-                    ],
+                  () =>
+                  showDialog<String>(
+                    context: context,
+                    builder:
+                        (BuildContext context) =>
+                        AlertDialog(
+                          title: const Text('You will be logged out.'),
+                          content: const Text(
+                              'Are you sure you want to log out?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => {},
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                //print('Outtttt');
+                                Navigator.pop(context, 'Logout');
+                                Navigator.pop(context, 'Logout');
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
                   ),
-                ),
 
             ),
           ],
-        title: Text('Talk group'),
-        backgroundColor: Colors.orange,
-        foregroundColor: Colors.white,
-      ),
-      body: SafeArea(
-        child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Card(child: _SampleCard(cardName: 'Elevated Card')),
-            Card.filled(child: _SampleCard(cardName: 'Filled Card')),
-            Card.outlined(child: _SampleCard(cardName: 'Outlined Card')),
-          ],
+          title: Text('Talk group'),
+          backgroundColor: Colors.orange,
+          foregroundColor: Colors.white,
         ),
-      )
+        body: SafeArea(
+          child: GridView(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 150),
+            children: [
+              Card(
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+
+                      });
+                    },
+                    child: IconButton(
+                        onPressed: () {
+
+                        },
+                        icon: Icon(
+                            Icons.add,
+                            color: Colors.orange,
+                            size: 56.0
+                        )
+                    ),
+                  )
+              ),
+              //Card(child: _SampleCard(cardName: 'Elevated Card')),
+              //Card.filled(child: _SampleCard(cardName: 'Filled Card')),
+              //Card.outlined(child: _SampleCard(cardName: 'Outlined Card')),
+              //GroupChatButton(),
+
+            ],
+          ),
+        )
     );
   }
 }
