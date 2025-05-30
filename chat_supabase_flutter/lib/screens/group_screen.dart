@@ -223,6 +223,8 @@ class _GroupScreenState extends State<GroupScreen> {
                   Navigator.push(context,
                       MaterialPageRoute(
                           builder: (context) {
+                            // Create new Chat group
+                            
                             return ChatScreen();
                           }
                       )
