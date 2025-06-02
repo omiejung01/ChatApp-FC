@@ -10,6 +10,9 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:chat_supabase_flutter/screens/profile_screen.dart';
 import 'package:chat_supabase_flutter/models/app_user.dart';
 import 'package:chat_supabase_flutter/components/group_chat_button.dart';
+import 'package:http/http.dart' as http;
+import 'package:chat_supabase_flutter/secret.dart' as my;
+import 'dart:convert';
 
 AppUser _appUser = new AppUser();
 
@@ -224,8 +227,10 @@ class _GroupScreenState extends State<GroupScreen> {
                       MaterialPageRoute(
                           builder: (context) {
                             // Create new Chat group
-                            
-                            return ChatScreen();
+                            return ChatScreen(
+                                email1: _appUser.email,
+                                email2: emailController.text
+                            );
                           }
                       )
                   );
@@ -244,6 +249,8 @@ class _GroupScreenState extends State<GroupScreen> {
       });
     }
   }
+
+
 }
 
 class _SampleCard extends StatelessWidget {

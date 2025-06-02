@@ -30,8 +30,17 @@ final _scrollController = ScrollController();
 
 String _signature = '';
 
+String _email1 = '';
+String _email2 = '';
 
 class ChatScreen extends StatefulWidget {
+  String email1 = '';
+  String email2 = '';
+  ChatScreen ({super.key, required this.email1, required this.email2}) {
+    _email1 = email1;
+    _email2 = email2;
+  }
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -173,6 +182,34 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
+  }
+
+  Future<String> getGroupID(
+      String email1,
+      String email2) async {
+    String result = '';
+
+    String url =
+        "https://tetrasolution.com/chatapp/api/create_group.php?"
+        "email1=$email1&email2=$email2";
+
+    final response = await http.get(
+      Uri.parse(url),
+      // Send authorization headers to the backend.
+      headers: my.header,
+    );
+
+    final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
+
+    String success = responseJson['result'];
+    //print("result: $success");
+    if (success.compareTo('Existing') == 0) {
+      result = responseJson['group_id'];
+    } else if (success.compareTo('Success') == 0) {
+      result = responseJson['group_id'];
+    }
+
+    return result;
   }
 }
 
