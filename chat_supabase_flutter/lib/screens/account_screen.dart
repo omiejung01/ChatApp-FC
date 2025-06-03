@@ -115,7 +115,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     } else {
                       //allowed = false;
                       //validateMessage = responseJson['Error'];
-                      errorMessage = "Cannot upload file";
+                      errorMessage = "Cannot change firstname";
                     }
                   }
                 },
@@ -159,7 +159,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     } else {
                       //allowed = false;
                       //validateMessage = responseJson['Error'];
-                      errorMessage = "Cannot upload file";
+                      errorMessage = "Cannot change lastname";
                     }
                   }
                 },

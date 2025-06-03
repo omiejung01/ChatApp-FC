@@ -34,6 +34,7 @@ class _GroupScreenState extends State<GroupScreen> {
 
   void initState() {
     super.initState();
+    _buildGroupCard();
   }
 
 
@@ -120,7 +121,7 @@ class _GroupScreenState extends State<GroupScreen> {
               //Card(child: _SampleCard(cardName: 'Elevated Card')),
               //Card.filled(child: _SampleCard(cardName: 'Filled Card')),
               //Card.outlined(child: _SampleCard(cardName: 'Outlined Card')),
-              //GroupChatButton(),
+              GroupChatButton(),
 
             ],
           ),
@@ -249,10 +250,42 @@ class _GroupScreenState extends State<GroupScreen> {
       });
     }
   }
-
-
 }
 
+Future<List<Widget>> _buildGroupCard() async {
+  List<Widget> cards = [];
+  String errorMessage = '';
+
+  String url = "https://tetrasolution.com/chatapp/api/list_group.php?email=${_appUser.email}";
+  final response = await http.get(
+    Uri.parse(url),
+    // Send authorization headers to the backend.
+    headers: my.header,
+  );
+
+  final responseJson =
+  jsonDecode(response.body) as Map<String, dynamic>;
+
+  String success = responseJson['result'];
+  //print("result: $success");
+  if (success.compareTo('Success') == 0) {
+    print('Success');
+    List<dynamic> groupList = responseJson['group_list'];
+    int len = groupList.length;
+    for (int i = 0; i <len; i++) {
+      print(groupList[i]);
+    }
+
+  } else {
+    //allowed = false;
+    //validateMessage = responseJson['Error'];
+    errorMessage = "Cannot check group";
+  }
+
+
+  return cards;
+}
+/*
 class _SampleCard extends StatelessWidget {
   const _SampleCard({required this.cardName});
   final String cardName;
@@ -262,3 +295,4 @@ class _SampleCard extends StatelessWidget {
     return SizedBox(height: 100, child: Center(child: Text(cardName)));
   }
 }
+*/

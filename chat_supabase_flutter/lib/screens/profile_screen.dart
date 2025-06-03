@@ -172,10 +172,10 @@ class _ProfilePicState extends State<ProfilePic> {
                     setState(() {
                       _pictureLocation = newFile;
                     });
-                    print('location: ' + _pictureLocation);
+                    //print('location: ' + _pictureLocation);
                     // Add Avatar to Database
                     String url = "https://tetrasolution.com/chatapp/api/add_avatar.php?email=$_userEmail&location=$_pictureLocation";
-                    print('url: ' + url);
+                    //print('url: ' + url);
 
                     final response = await http.get(
                       Uri.parse(url),
@@ -327,7 +327,7 @@ class _ProfilePicState extends State<ProfilePic> {
     String returnValue = '';
     String fileName = medium.path.split('/').last;
     String base64Image = base64Encode(await medium.readAsBytes());
-    print("base64: " + base64Image.length.toString());
+    //print("base64: " + base64Image.length.toString());
     await http.post(Uri.parse(uploadEndPoint),
         body: {
       "image": base64Image,
