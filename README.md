@@ -7,7 +7,7 @@ Please put this code in you chatapp/db.inc.php
 ```
 import 'package:flutter/material.dart';
 
-const supabase_url='<your supbase url>';
+const supabase_url='<your supabase url>';
 const anon_key = '<your supabase anon key>';
 
 
