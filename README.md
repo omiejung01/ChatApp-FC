@@ -28,4 +28,5 @@ logo2.png
 # Todo
 - Avatar image file upload. (Done)
 - Message expire algorithm
+- Create group 
 
