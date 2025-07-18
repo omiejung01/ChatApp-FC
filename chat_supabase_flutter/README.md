@@ -1,6 +1,6 @@
 # chat_supabase_flutter
 
-A new Flutter project.
+An Mes8 Flutter project-01.
 
 ## Getting Started
 

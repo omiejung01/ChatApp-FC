@@ -12,7 +12,9 @@ class GroupChatButton extends StatelessWidget {
   ];
   final double overlapOffset = 20.0;
 
-  GroupChatButton();
+  List<String> emails = [];
+
+  GroupChatButton({this.emails = const []});
 
   @override
   Widget build(BuildContext context) {
