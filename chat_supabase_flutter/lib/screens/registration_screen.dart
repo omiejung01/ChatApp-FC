@@ -347,7 +347,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               children: <Widget>[
                 Text('Thank you for registration!!!'),
                 Text(''),
-                Text('Please confirm registration by clicking the link in your email.'),
+                Text('Your confirmation email has been sent. Please check your inbox, and if you do not see it, look in your Junk or Spam folder.'),
               ],
             ),
           ),
