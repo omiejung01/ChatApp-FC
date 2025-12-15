@@ -345,6 +345,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
+                
                 Text('Thank you for registration!!!'),
                 Text(''),
                 Text('Your confirmation email has been sent. Please check your inbox, and if you do not see it, look in your Junk or Spam folder.'),
