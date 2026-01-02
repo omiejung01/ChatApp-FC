@@ -1,5 +1,5 @@
 # ChatApp-FC
-This is my version of Flash Chat App of London Brewery App with Supabase and my own Back-End PHP resources. 91
+This is my version of Flash Chat App of London Brewery App with Supabase and my own Back-End PHP resources. 92
 
 # lib/secret.dart
 Please put this code in you chatapp/db.inc.php
